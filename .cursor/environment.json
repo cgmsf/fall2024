@@ -1,0 +1,11 @@
+{
+  "name": "Nepantla Garden",
+  "install": "npm ci",
+  "terminals": [
+    {
+      "name": "quartz",
+      "command": "npx quartz build --serve --port 8080"
+    }
+  ],
+  "ports": [8080]
+}
