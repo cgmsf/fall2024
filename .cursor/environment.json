@@ -1,11 +1,11 @@
 {
   "name": "Nepantla Garden",
-  "install": "python3 --version",
+  "install": "npm ci",
   "terminals": [
     {
-      "name": "static-server",
-      "command": "python3 -m http.server 8000 --bind 0.0.0.0"
+      "name": "quartz",
+      "command": "npx quartz build --serve --port 8080"
     }
   ],
-  "ports": [8000]
+  "ports": [8080]
 }

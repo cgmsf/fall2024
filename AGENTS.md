@@ -4,38 +4,65 @@ Guidance for AI coding agents (Cursor Cloud Agents and others) working in this r
 
 ## What this project is
 
-A small, self-contained static web page: a **Grade Calculator** that weights
-**Participation (40%)**, **Effort (40%)**, and **Improvement (20%)** into a final grade.
+**Nepantla Garden** — a public digital garden built with [Quartz](https://quartz.jzhao.xyz)
+that publishes selected **teaching materials and writing** from a personal Obsidian vault.
 
-There is no backend, build step, framework, package manager, or dependencies — just
-static files served over HTTP.
+- Notes live as Markdown in `content/`.
+- The private Obsidian vault is **separate** (synced via Obsidian Sync) and is **not**
+  in this repo. Only finished notes are copied here to be published.
+- The site deploys automatically to GitHub Pages on every push to `main`.
 
 ## Running / previewing
 
-The Cloud Agent environment (`.cursor/environment.json`) automatically starts a static
-file server, so you normally don't need to start anything:
+The Cloud Agent environment (`.cursor/environment.json`) installs dependencies and
+starts a live-preview server automatically:
 
-- Server: `python3 -m http.server 8000` (run from the repo root)
-- Directory listing: http://localhost:8000/
-- The app: http://localhost:8000/Fall%202024%20Grade%20Calculator.html
+- Install: `npm ci`
+- Preview server: `npx quartz build --serve --port 8080`
+- URL: http://localhost:8080/
 
-To run it manually in a fresh shell: `python3 -m http.server 8000`.
+To run it manually: `npm ci` then `npx quartz build --serve`.
+
+## What gets published (opt-in)
+
+Publishing is **opt-in** via the `explicit-publish` plugin. A note is published **only**
+if its frontmatter contains:
+
+```yaml
+---
+title: My note
+publish: true
+---
+```
+
+Notes without `publish: true` are excluded from the site (URL 404s and they don't appear
+in navigation, search, or the graph). The `private/` folder is also git-ignored, so
+anything there never reaches GitHub. This means the default is **private** — nothing is
+published unless explicitly flagged.
+
+## How content gets here
+
+Content flows one way, vault → repo:
+
+1. In Obsidian, mark a finished note with `publish: true`.
+2. Copy that note's Markdown into `content/` in this repo (preserve any folder like
+   `teaching/` or `writing/`). In Cursor you can ask the agent to do this copy + commit.
+3. Commit and push to `main`; the GitHub Pages workflow builds and deploys.
+
+Never bolt Git or another sync tool onto the live vault — keep that on Obsidian Sync only.
 
 ## Conventions
 
-- Keep the project **dependency-free and simple**. Do not introduce a build system,
-  framework, bundler, or package manager unless the user explicitly asks for one.
-- **HTML files must be real, renderable HTML.** Note: `Fall 2024 Grade Calculator.html`
-  is currently a macOS "Cocoa HTML Writer" export whose body contains the calculator
-  markup as *escaped text*, so browsers display its source code instead of rendering the
-  calculator. If you edit that file, replace it with the un-escaped, working HTML (the
-  correct markup is already embedded inside it as text).
-- Preserve the grading weights (Participation 40%, Effort 40%, Improvement 20%) unless
-  the user asks to change them.
+- Keep all publishable notes under `content/`. Use Obsidian-style `[[wikilinks]]`.
+- Do not commit `node_modules/` or `public/` (both are git-ignored).
+- Prefer configuration changes in `quartz.config.default.yaml` (title, colors, plugins).
+- The site's `baseUrl` in `quartz.config.default.yaml` must match where it's hosted
+  (currently `cgmsf.github.io/fall2024`); update it if the repo is renamed or a custom
+  domain is added.
 
 ## Testing changes
 
-- For any UI or behavior change, load the page in a browser via the running server and
-  verify it renders and that the **Calculate Final Grade** button produces the expected
-  result (e.g. Participation 80, Effort 90, Improvement 100 → `88.00%`).
-- When demonstrating a change, include a screenshot or short recording of the working page.
+- After content or config changes, run `npx quartz build --serve` and load the site in a
+  browser. Verify: the changed page renders, `[[wikilinks]]` resolve, and any note that
+  should be private is absent (returns 404).
+- When demonstrating a change, include a screenshot or short recording of the site.
