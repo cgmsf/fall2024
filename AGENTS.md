@@ -58,7 +58,8 @@ Never bolt Git or another sync tool onto the live vault — keep that on Obsidia
 - Prefer configuration changes in `quartz.config.default.yaml` (title, colors, plugins).
 - The site's `baseUrl` in `quartz.config.default.yaml` must match where it's hosted
   (currently `cgmsf.github.io/fall2024`); update it if the repo is renamed or a custom
-  domain is added.
+  domain is added. It currently assumes the repo is named `nepantla-garden`
+  (`cgmsf.github.io/nepantla-garden`).
 
 ## Testing changes
 

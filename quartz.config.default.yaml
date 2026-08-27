@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: en-US
-  baseUrl: cgmsf.github.io/fall2024
+  baseUrl: cgmsf.github.io/nepantla-garden
   ignorePatterns:
     - private
     - templates
